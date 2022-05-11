@@ -21,13 +21,13 @@ class Bkb extends CI_Controller
         //DB MSAL
         $this->db_logistik_msal = $this->load->database('db_logistik_msal', TRUE);
         //DB MAPA
-        $this->db_logistik_mapa = $this->load->database('db_logistik_mapa', TRUE);
-        //DB psam
-        $this->db_logistik_psam = $this->load->database('db_logistik_psam', TRUE);
-        //DB peak
-        $this->db_logistik_peak = $this->load->database('db_logistik_peak', TRUE);
-        //DB kpp
-        $this->db_logistik_kpp = $this->load->database('db_logistik_kpp', TRUE);
+        // $this->db_logistik_mapa = $this->load->database('db_logistik_mapa', TRUE);
+        // //DB psam
+        // $this->db_logistik_psam = $this->load->database('db_logistik_psam', TRUE);
+        // //DB peak
+        // $this->db_logistik_peak = $this->load->database('db_logistik_peak', TRUE);
+        // //DB kpp
+        // $this->db_logistik_kpp = $this->load->database('db_logistik_kpp', TRUE);
         // DB GL
         // $this->db_mips_gl = $this->load->database('db_mips_gl_' . $db_pt, TRUE);
         if ($this->session->userdata('kode_dev') == '01') {

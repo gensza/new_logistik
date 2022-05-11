@@ -82,28 +82,28 @@ class Login extends CI_Controller
                         $get_pt = $this->$pt_login->get_where('pt', array('lokasi' => 'HO'));
                         $pt     = $get_pt->row();
 
-                        $kode_pt = $pt->kodetxt;
+                        $kode_pt = $pt->kode_pt;
                         $nama_pt = $pt->PT;
                         break;
                     case 'RO':
                         $get_pt = $this->$pt_login->get_where('pt', array('lokasi' => 'RO'));
                         $pt     = $get_pt->row();
 
-                        $kode_pt = $pt->kodetxt;
+                        $kode_pt = $pt->kode_pt;
                         $nama_pt = $pt->PT;
                         break;
                     case 'ESTATE':
                         $get_pt = $this->$pt_login->get_where('pt', array('lokasi' => 'SITE'));
                         $pt     = $get_pt->row();
 
-                        $kode_pt = $pt->kodetxt;
+                        $kode_pt = $pt->kode_pt;
                         $nama_pt = $pt->PT;
                         break;
                     case 'PKS':
                         $get_pt = $this->$pt_login->get_where('pt', array('lokasi' => 'PKS'));
                         $pt     = $get_pt->row();
 
-                        $kode_pt = $pt->kodetxt;
+                        $kode_pt = $pt->kode_pt;
                         $nama_pt = $pt->PT;
                         break;
                     default:

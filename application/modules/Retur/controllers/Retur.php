@@ -24,7 +24,7 @@ class Retur extends CI_Controller
         $this->db_logistik_msal = $this->load->database('db_logistik_msal', TRUE);
 
         //DB MAPA
-        $this->db_logistik_mapa = $this->load->database('db_logistik_mapa', TRUE);
+        // $this->db_logistik_mapa = $this->load->database('db_logistik_mapa', TRUE);
 
         if (!$this->session->userdata('id_user')) {
             $pemberitahuan = "<div class='alert alert-warning'>Anda harus login dulu </div>";
