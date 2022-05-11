@@ -13,7 +13,7 @@ class Bpb extends CI_Controller
         $this->load->model('M_listbpb');
         $this->load->model('M_detail');
         $db_pt = check_db_pt();
-        $this->db_logistik = $this->load->database('db_logistik', TRUE);
+        // $this->db_logistik = $this->load->database('db_logistik', TRUE);
         // $this->db_mips_gl = $this->load->database('db_mips_gl_' . $db_pt, TRUE);
         if ($this->session->userdata('kode_dev') == '01') {
             $this->db_mips_gl = $this->load->database('db_mips_gl_' . $db_pt, TRUE); //HO

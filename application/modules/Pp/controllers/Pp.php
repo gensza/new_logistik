@@ -12,7 +12,7 @@ class Pp extends CI_Controller
         $this->load->model('M_detail');
 
         $db_pt = check_db_pt();
-        $this->db_logistik = $this->load->database('db_logistik', TRUE);
+        // $this->db_logistik = $this->load->database('db_logistik', TRUE);
         $this->db_logistik_pt = $this->load->database('db_logistik_' . $db_pt, TRUE);
 
         if ($this->session->userdata('kode_dev') == '01') {

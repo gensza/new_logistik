@@ -15,10 +15,10 @@ class Login extends CI_Controller
         $this->db_logistik_pt = $this->load->database('db_logistik_' . $db_pt, TRUE);
         $this->db_logistik_center = $this->load->database('db_logistik_center', true);
         $this->db_logistik_msal = $this->load->database('db_logistik_msal', true);
-        $this->db_logistik_mapa = $this->load->database('db_logistik_mapa', true);
-        $this->db_logistik_peak = $this->load->database('db_logistik_peak', true);
-        $this->db_logistik_psam = $this->load->database('db_logistik_psam', true);
-        $this->db_logistik_kpp = $this->load->database('db_logistik_kpp', true);
+        // $this->db_logistik_mapa = $this->load->database('db_logistik_mapa', true);
+        // $this->db_logistik_peak = $this->load->database('db_logistik_peak', true);
+        // $this->db_logistik_psam = $this->load->database('db_logistik_psam', true);
+        // $this->db_logistik_kpp = $this->load->database('db_logistik_kpp', true);
     }
 
     public function index()

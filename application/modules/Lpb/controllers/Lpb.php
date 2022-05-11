@@ -18,7 +18,7 @@ class Lpb extends CI_Controller
 
         $this->db_logistik_pt = $this->load->database('db_logistik_' . $db_pt, TRUE);
 
-        $this->db_logistik = $this->load->database('db_logistik', TRUE);
+        // $this->db_logistik = $this->load->database('db_logistik', TRUE);
 
         $this->db_logistik_center = $this->load->database('db_logistik_center', TRUE);
 

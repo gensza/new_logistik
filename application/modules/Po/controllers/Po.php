@@ -17,7 +17,7 @@ class Po extends CI_Controller
         $db_pt = check_db_pt();
         // $this->db_logistik = $this->load->database('db_logistik',TRUE);
         $this->db_logistik_pt = $this->load->database('db_logistik_' . $db_pt, TRUE);
-        $this->db_logistik = $this->load->database('db_logistik', TRUE);
+        // $this->db_logistik = $this->load->database('db_logistik', TRUE);
         $this->db_logistik_center = $this->load->database('db_logistik_center', TRUE);
 
         if (!$this->session->userdata('id_user')) {
@@ -342,7 +342,7 @@ class Po extends CI_Controller
         // $data['supplier'] = $this->db_logistik_pt->get_where('supplier', array('kode'=>$kode_supplier))->row();
 
         $query_supplier = "SELECT * FROM supplier WHERE kode = '$kode_supplier' AND account IS NOT NULL";
-        $data['supplier'] = $this->db_logistik->query($query_supplier)->row();
+        $data['supplier'] = $this->db_logistik_center->query($query_supplier)->row();
 
         $no_refpo = $data['po']->noreftxt;
         $data['spp'] = $this->db_logistik_pt->query("SELECT DISTINCT refppo FROM item_po WHERE noref='$no_refpo'")->result();
@@ -542,7 +542,7 @@ class Po extends CI_Controller
     function cek_supplier()
     {
         $kode = $this->input->post('kode');
-        $data = $this->db_logistik->query("SELECT * FROM supplier WHERE kode='$kode'")->row();
+        $data = $this->db_logistik_center->query("SELECT * FROM supplier WHERE kode='$kode'")->row();
         echo json_encode($data);
     }
 
