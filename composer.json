@@ -1,0 +1,7 @@
+{
+    "name": "msal_laptop/aplikasi_stki",
+    "type": "y",
+    "require": {
+        "mpdf/mpdf": "^8.0"
+    }
+}

@@ -1,0 +1,6 @@
+1. revisi untuk PO :
+    - Lap PO cash ngambil dari field cash
+2. revisi untuk LPB :
+    - Lpb mutasi di tabelnya di tambahin asal PT nya 
+3. revisi BKB :
+    - dibawah nominal khusus tanaman
