@@ -36,6 +36,8 @@ class Pp extends CI_Controller
 
     function list_pp()
     {
+        $data = $this->input->post('data');
+        $this->M_dataPP->where_datatables($data);
         $list = $this->M_dataPP->get_datatables();
         $data = array();
         $no = $_POST['start'];

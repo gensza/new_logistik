@@ -16,36 +16,57 @@ class M_dataPP extends CI_Model
         $this->load->database();
     }
 
+    public function where_datatables($data)
+    {
+        // global $nopo;
+        $this->data = $data;
+        // return $nopo;
+    }
+
     private function _get_datatables_query()
     {
         // $Value = ;
-
+        $data = $this->data;
         $txtperiode = $this->session->userdata('ym_periode');
         $lokasi_sesi = $this->session->userdata('status_lokasi');
+        $kodept = $this->session->userdata('kode_dev');
+
         if ($lokasi_sesi == 'HO') {
             $this->db_logistik_pt->from($this->table);
-
-            $this->db_logistik_pt->where('txtperiode', $txtperiode);
-            $this->db_logistik_pt->like('ref_pp', 'PST', 'both');
+            if ($data == 'HO') {
+                $this->db_logistik_pt->where('kodept', '01');
+            } elseif ($data == 'SITE') {
+                $this->db_logistik_pt->where('kodept', '06');
+            } elseif ($data == 'PKS') {
+                $this->db_logistik_pt->where('kodept', '03');
+            } elseif ($data == 'RO') {
+                $this->db_logistik_pt->where('kodept', '02');
+            } else {
+                $this->db_logistik_pt->where('txtperiode', $txtperiode);
+            }
+            // $this->db_logistik_pt->like('ref_po', 'PST', 'both');
+            // $this->db_logistik_pt->where('kodept', $kodept);
         } else {
             # code...
             $this->db_logistik_pt->from($this->table);
-            if ($lokasi_sesi == 'SITE') {
-                $this->db_logistik_pt->where('txtperiode', $txtperiode);
-                $this->db_logistik_pt->like('ref_pp', 'EST', 'both');
+            $this->db_logistik_pt->where('txtperiode', $txtperiode);
+            // $this->db_logistik_pt->like('ref_po', 'EST', 'both');
+            $this->db_logistik_pt->where('kodept', $kodept);
+            // if ($lokasi_sesi == 'SITE') {
+            //     # code...
+            // } else if ($lokasi_sesi == 'PKS') {
+            //     $this->db_logistik_pt->where('txtperiode', $txtperiode);
+            //     // $this->db_logistik_pt->like('ref_po', 'FAC', 'both');
+            //     $this->db_logistik_pt->where('kodept', $kodept);
 
-                # code...
-            } else if ($lokasi_sesi == 'PKS') {
-                $this->db_logistik_pt->where('txtperiode', $txtperiode);
-                $this->db_logistik_pt->like('ref_pp', 'FAC', 'both');
+            //     # code...
+            // } else if ($lokasi_sesi == 'RO') {
+            //     $this->db_logistik_pt->where('txtperiode', $txtperiode);
+            //     // $this->db_logistik_pt->like('ref_po', 'ROM', 'both');
+            //     $this->db_logistik_pt->where('kodept', $kodept);
 
-                # code...
-            } else if ($lokasi_sesi == 'RO') {
-                $this->db_logistik_pt->where('txtperiode', $txtperiode);
-                $this->db_logistik_pt->like('ref_pp', 'ROM', 'both');
-
-                # code...
-            }
+            //     # code...
+            // }
         }
 
 
