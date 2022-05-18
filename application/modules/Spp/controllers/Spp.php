@@ -1518,6 +1518,8 @@ class Spp extends CI_Controller
             $mpdf->showWatermarkImage = true;
         }
 
+        // var_dump($data) . die();
+
         $html = $this->load->view('v_spp_print', $data, true);
 
         $mpdf->WriteHTML($html);

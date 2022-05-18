@@ -9,6 +9,7 @@ class Pp extends CI_Controller
         parent::__construct();
         $this->load->model('M_pp');
         $this->load->model('M_dataPP');
+        $this->load->model('M_listdataPP');
         $this->load->model('M_detail');
 
         $db_pt = check_db_pt();
@@ -45,14 +46,12 @@ class Pp extends CI_Controller
             $no++;
             $row   = array();
             $id = $hasil->id;
-            $refpp = $hasil->ref_pp;
+            $refpp = $hasil->nopp;
             $ref_po = $hasil->ref_po;
-            $noref = str_replace('/', '.', $refpp);
-            $norefpo = str_replace('/', '.', $ref_po);
 
             if ($hasil->batal == 1) {
                 $row[] = '
-                <a href="' .  site_url('Pp/cetak/' .  $noref . '/' . $id) . '" target="_blank" title="Cetak PP" class="btn btn-primary btn-xs fa fa-print" id="a_print_po"></a>
+                <a href="' .  site_url('Pp/cetak/' .  $refpp . '/' . $id) . '" target="_blank" title="Cetak PP" class="btn btn-primary btn-xs fa fa-print" id="a_print_po"></a>
                 <a href="javascript:;" id="a_delete_pp">
                 <button class="btn btn-info btn-xs fa fa-eye" id="btn_detail" name="btn_batal_pp" data-toggle="tooltip" style="padding-right:8px;" data-placement="top" title="Detail PP" onClick="detail(' . $id . ',' . $hasil->batal  . ')">
                 </button>
@@ -68,7 +67,7 @@ class Pp extends CI_Controller
 
                     $status = '<h5 style="margin-top:0px; margin-bottom:0px;"><span class="badge badge-success">Cashbank</span></h5>';
                     # code...
-                    $row[] = '<a href="' .  site_url('Pp/cetak/' .  $noref . '/' . $id) . '" target="_blank" title="Cetak PP" class="btn btn-primary btn-xs fa fa-print" id="a_print_po"></a>
+                    $row[] = '<a href="' .  site_url('Pp/cetak/' .  $refpp . '/' . $id) . '" target="_blank" title="Cetak PP" class="btn btn-primary btn-xs fa fa-print" id="a_print_po"></a>
                     <a href="javascript:;" id="a_delete_pp">
                     <button class="btn btn-info btn-xs fa fa-eye" id="btn_detail" name="btn_batal_pp" data-toggle="tooltip" style="padding-right:8px;" data-placement="top" title="Detail PP" onClick="detail(' . $id . ',' . $hasil->batal  . ')">
                     </button>
@@ -76,9 +75,9 @@ class Pp extends CI_Controller
                 } else {
                     $status = '<h5 style="margin-top:0px; margin-bottom:0px;"><span class="badge badge-warning">Proses</span></h5>';
                     # code...
-                    $row[] = '<a href="' . site_url('Pp/edit_pp/' . $id . '/' . $noref) . '" class="btn btn-warning fa fa-edit btn-xs" data-toggle="tooltip" data-placement="top" title="Update PP" id="btn_edit_pp"></a>
+                    $row[] = '<a href="' . site_url('Pp/edit_pp/' . $id . '/' . $refpp) . '" class="btn btn-warning fa fa-edit btn-xs" data-toggle="tooltip" data-placement="top" title="Update PP" id="btn_edit_pp"></a>
         
-                    <a href="' .  site_url('Pp/cetak/' .  $noref . '/' . $id) . '" target="_blank" title="Cetak PP" class="btn btn-primary btn-xs fa fa-print" id="a_print_po"></a>
+                    <a href="' .  site_url('Pp/cetak/' .  $refpp . '/' . $id) . '" target="_blank" title="Cetak PP" class="btn btn-primary btn-xs fa fa-print" id="a_print_po"></a>
                     <a href="javascript:;" id="a_delete_pp">
                         <button class="btn btn-info btn-xs fa fa-eye" id="btn_detail" name="btn_batal_pp" data-toggle="tooltip" style="padding-right:8px;" data-placement="top" title="Detail PP" onClick="detail(' . $id . ',' . $hasil->batal  . ')">
                         </button>
@@ -104,6 +103,46 @@ class Pp extends CI_Controller
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->M_dataPP->count_all(),
             "recordsFiltered" => $this->M_dataPP->count_filtered(),
+            "data" => $data,
+        );
+        //output dalam format JSON
+        echo json_encode($output);
+    }
+    function data_pp()
+    {
+        $kodept = $this->input->post('kodept');
+        $tgl1 = $this->input->post('tgl1');
+        $tgl2 = $this->input->post('tgl2');
+        $this->M_listdataPP->where_datatables($kodept, $tgl1, $tgl2);
+        $list = $this->M_listdataPP->get_datatables();
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $hasil) {
+            $no++;
+            $row   = array();
+            $id = $hasil->id;
+            $refpp = $hasil->nopp;
+            $ref_po = $hasil->ref_po;
+
+            $row[] = $no . ".";
+            $row[] = date('d-m-Y', strtotime($hasil->tglpp));
+            $row[] = $hasil->nopp;
+            $row[] = $hasil->ref_po;
+            $row[] = $hasil->nama_supply;
+            $row[] = '
+            <a href="' .  site_url('Pp/cetak/' .  $refpp . '/' . $id) . '" target="_blank" title="Cetak PP" class="btn btn-primary btn-xs fa fa-print" id="a_print_po"></a>';
+
+
+
+
+
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->M_listdataPP->count_all(),
+            "recordsFiltered" => $this->M_listdataPP->count_filtered(),
             "data" => $data,
         );
         //output dalam format JSON
@@ -664,18 +703,20 @@ class Pp extends CI_Controller
     public function cetak()
     {
         $no_ref = $this->uri->segment('3');
-        $no_pp = str_replace('.', '/',  $no_ref);
+        $no_pp =  $no_ref;
 
         $id = $this->uri->segment('4');
 
+
         $this->qrcode($no_pp, $id);
 
-        $data['data_pp'] = $this->db_logistik_pt->get_where('pp', array('ref_pp' => $no_pp, 'id' => $id))->row();
+        $data['data_pp'] = $this->db_logistik_pt->get_where('pp', array('nopp' => $no_pp, 'id' => $id))->row();
         $data['po'] = $this->db_logistik_pt->get_where('po', array('noreftxt' => $data['data_pp']->ref_po))->row();
         $data['devisi'] = $this->db_logistik_pt->get_where('tb_devisi', array('kodetxt' => $data['data_pp']->ref_po))->row();
+        // var_dump($data['data_pp']) . die();
 
         $this->db_logistik_pt->where('id', $id);
-        $this->db_logistik_pt->where('ref_pp', $no_pp);
+        $this->db_logistik_pt->where('nopp', $no_pp);
         $cek = $this->db_logistik_pt->get_where('pp');
         if ($cek->num_rows() > 0) {
             $cek = $cek->row();
@@ -685,14 +726,14 @@ class Pp extends CI_Controller
                 'jml_cetak' => $jml_ + 1
             ];
             $this->db_logistik_pt->where('id', $id);
-            $this->db_logistik_pt->where('ref_pp', $no_pp);
+            $this->db_logistik_pt->where('nopp', $no_pp);
             $this->db_logistik_pt->update('pp', $up);
         } else {
             $ins = [
                 'jml_cetak' => 1
             ];
             $this->db_logistik_pt->where('id', $id);
-            $this->db_logistik_pt->where('ref_pp', $no_pp);
+            $this->db_logistik_pt->where('nopp', $no_pp);
             $this->db_logistik_pt->update('pp', $ins);
             // $this->db_logistik_pt->insert('po', $ins);
         }

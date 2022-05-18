@@ -279,17 +279,17 @@ class M_laporan extends CI_Model
         $no = $start + 1;
 
         $cmb_devisi1 = $this->input->post('cmb_devisi1');
-        $txt_periode4 = str_replace('/', '-', $this->input->post('txt_periode4'));
-        $txt_periode5 = str_replace('/', '-', $this->input->post('txt_periode5'));
+        $tglawal = str_replace('/', '-', $this->input->post('txt_periode4'));
+        $tgakhir = str_replace('/', '-', $this->input->post('txt_periode5'));
 
-        $txt_periode4 = date_create($txt_periode4);
-        $txt_periode4 = date_format($txt_periode4, "Y-m-d");
-        $txt_periode5 = date_create($txt_periode5);
-        $txt_periode5 = date_format($txt_periode5, "Y-m-d");
+        $tgl_awal = date_create($tglawal);
+        $tgl1 = date_format($tgl_awal, "Y-m-d");
+        $tgl_akhir = date_create($tgakhir);
+        $tgl2 = date_format($tgl_akhir, "Y-m-d");
 
         if (!empty($_POST['search']['value'])) {
             $keyword = $_POST['search']['value'];
-            $query = "SELECT * FROM pp WHERE tglpp BETWEEN '" . $txt_periode4 . "' AND '" . $txt_periode5 . "' AND kodept = '$cmb_devisi1' AND batal = '0' AND ( 
+            $query = "SELECT * FROM pp WHERE tglpp BETWEEN '$tgl1' AND '$tgl2' AND kodept = '$cmb_devisi1' AND batal = '0' AND ( 
                         tglpp LIKE '%$keyword%'
                         OR nama_supply LIKE '%$keyword%'
                         OR ref_po LIKE '%$keyword%'
@@ -298,7 +298,7 @@ class M_laporan extends CI_Model
             $count_all = $this->db_logistik_pt->query($query)->num_rows();
             $data_tabel = $this->db_logistik_pt->query($query . " LIMIT $start,$length")->result();
         } else {
-            $query = "SELECT * FROM pp WHERE tglpp BETWEEN '" . $txt_periode4 . "' AND '" . $txt_periode5 . "' AND kodept ='$cmb_devisi1' AND batal = '0'";
+            $query = "SELECT * FROM pp WHERE tglpp BETWEEN '$tgl1' AND '$tgl2' AND kodept ='$cmb_devisi1' AND batal = '0'";
             $count_all = $this->db_logistik_pt->query($query)->num_rows();
             $data_tabel = $this->db_logistik_pt->query($query . " LIMIT $start,$length")->result();
         }
@@ -307,6 +307,7 @@ class M_laporan extends CI_Model
             $tglpp = date_create($hasil->tglpp);
             $nopp = "'" . $hasil->nopp . "'";
             $refpp =  $hasil->ref_pp;
+            $nopp =  $hasil->nopp;
             $ref_pp = str_replace("/", ".", $refpp);
             $id = $hasil->id;
             $kode_supply = "'" . $hasil->kode_supply . "'";
@@ -316,7 +317,7 @@ class M_laporan extends CI_Model
             $row[] = $hasil->ref_pp;
             $row[] = $hasil->ref_po;
             $row[] = $hasil->nama_supply;
-            $row[] = ' <a href="' .  site_url('Pp/cetak/' .  $ref_pp . '/' . $id) . '" target="_blank" title="Cetak PP" class="btn btn-primary btn-xs fa fa-print" id="a_print_po"></a>';
+            $row[] = ' <a href="' .  site_url('Pp/cetak/' .  $nopp . '/' . $id) . '" target="_blank" title="Cetak PP" class="btn btn-primary btn-xs fa fa-print" id="a_print_po"></a>';
             $data[] = $row;
         }
         $output = array(

@@ -6,7 +6,7 @@ class M_lapSpp extends CI_Model
 {
     // Start Data Table Server Side
     var $table = 'ppo'; //nama tabel dari database
-    var $column_order = array(null, 'id', 'tglppo', 'namadept', 'noreftxt', 'kodedept', 'status2', 'user'); //field yang ada di table user
+    var $column_order = array(null, 'id', 'tglppo', 'namadept', 'noreftxt', 'kodedept', 'status2', 'user', 'noppo'); //field yang ada di table user
     var $column_search = array('id', 'tglppo', 'namadept', 'noreftxt'); //field yang diizin untuk pencarian 
     var $order = array('id' => 'desc'); // default order 
 
@@ -41,12 +41,12 @@ class M_lapSpp extends CI_Model
             if ($bagian == 'Semua') {
                 # code...
                 $this->db_logistik_pt->from('ppo')
-                    ->select('noreftxt, namadept, po, status2,user,kodedept, kode_dev, date(tglppo) as tglppo')
+                    ->select('noreftxt, namadept, po, status2,user,kodedept, kode_dev, date(tglppo) as tglppo, noppo, id')
                     ->where("date(tglppo) >=", $tglAwal)
                     ->where("date(tglppo) <=", $tglAkhir);
             } else {
                 $this->db_logistik_pt->from('ppo')
-                    ->select('noreftxt, namadept, po, status2,user,kodedept, kode_dev, date(tglppo) as tglppo')
+                    ->select('noreftxt, namadept, po, status2,user,kodedept, kode_dev, date(tglppo) as tglppo, noppo, id')
                     ->where("kodedept", $bagian)
                     ->where("date(tglppo) >=", $tglAwal)
                     ->where("date(tglppo) <=", $tglAkhir);
@@ -56,13 +56,13 @@ class M_lapSpp extends CI_Model
             if ($bagian == 'Semua') {
                 # code...
                 $this->db_logistik_pt->from('ppo')
-                    ->select('noreftxt, namadept, po, status2,user,kodedept, kode_dev, date(tglppo) as tglppo')
+                    ->select('noreftxt, namadept, po, status2,user,kodedept, kode_dev, date(tglppo) as tglppo, noppo, id')
                     ->where("kode_dev", $devisi)
                     ->where("date(tglppo) >=", $tglAwal)
                     ->where("date(tglppo) <=", $tglAkhir);
             } else {
                 $this->db_logistik_pt->from('ppo')
-                    ->select('noreftxt, namadept, po, status2,user,kodedept, kode_dev, date(tglppo) as tglppo')
+                    ->select('noreftxt, namadept, po, status2,user,kodedept, kode_dev, date(tglppo) as tglppo, noppo, id')
                     ->where("kode_dev", $devisi)
                     ->where("kodedept", $bagian)
                     ->where("date(tglppo) >=", $tglAwal)

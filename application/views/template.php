@@ -3225,8 +3225,8 @@ date_default_timezone_set('Asia/Jakarta');
             });
         }
 
-        function printClick(noreftxt) {
-            window.open('<?= site_url("Laporan/print_lap_spp"); ?>/' + noreftxt);
+        function printClick(noreftxt, id) {
+            window.open('<?= site_url("Spp/cetak/"); ?>' + noreftxt + '/' + id);
         }
 
         function printLapPOCetClick(noreftxt, no_refppo, kode_supply) {
@@ -3408,37 +3408,26 @@ date_default_timezone_set('Asia/Jakarta');
                 window.open('<?= site_url("Laporan/print_lap_pp_register"); ?>/' + cmb_devisi1 + '/' + txt_periode4 + '/' + txt_periode5);
             } else {
                 $('#modalListLapPP').modal('show');
+
+
                 $('#tableListLapPP').DataTable().destroy();
                 $('#tableListLapPP').DataTable({
-                    "paging": true,
-                    "scrollY": false,
-                    "scrollX": false,
-                    "searching": true,
-                    "select": false,
-                    "bLengthChange": true,
-                    "scrollCollapse": true,
-                    "bPaginate": true,
-                    "bInfo": true,
-                    "bSort": false,
                     "processing": true,
                     "serverSide": true,
-                    "stateSave": true,
                     "order": [],
-                    "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                        console.log(aData);
-                    },
                     "ajax": {
-                        "url": "<?php echo site_url('Laporan/listPPCetakan'); ?>",
+                        "url": "<?php echo site_url('Pp/data_pp'); ?>",
                         "type": "POST",
                         "data": {
-                            "cmb_devisi1": cmb_devisi1,
-                            "txt_periode4": txt_periode4,
-                            "txt_periode5": txt_periode5
+                            "kodept": cmb_devisi1,
+                            "tgl1": txt_periode4,
+                            "tgl2": txt_periode5
                         },
                         "error": function(request) {
                             console.log(request.responseText);
                         }
                     },
+
                     "columns": [{
                             "width": "5%"
                         },
@@ -3462,6 +3451,10 @@ date_default_timezone_set('Asia/Jakarta');
                         "targets": [],
                         "orderable": false,
                     }, ],
+                    "language": {
+                        "infoFiltered": ""
+                    }
+
                 });
                 var rel = setInterval(function() {
                     $('#tableListLapPP').DataTable().ajax.reload();
@@ -3469,7 +3462,7 @@ date_default_timezone_set('Asia/Jakarta');
                 }, 100);
             }
 
-            console.log(cmb_devisi1, txt_periode4, txt_periode5, rbt_pilihan2);
+            // console.log(cmb_devisi1, txt_periode4, txt_periode5, rbt_pilihan2);
         }
 
         function tampilkanLPB() {
