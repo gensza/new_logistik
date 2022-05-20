@@ -1263,6 +1263,7 @@ class Lpb extends CI_Controller
                 $data['lokasilpb'] = "SITE";
                 break;
             default:
+                $data['lokasilpb'] = "";
                 break;
         }
 
