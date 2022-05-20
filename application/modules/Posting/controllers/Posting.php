@@ -968,6 +968,23 @@ class Posting extends CI_Controller
             $data = $this->db_conf_caba->query("SELECT txtperiode FROM tb_setup WHERE id_modul='2' AND id_pt='$pt' AND lokasi='$lokasi'")->row();
             echo json_encode($data);
       }
+
+      function get_nilai_item()
+      {
+            $bkb = $this->M_posting->getdataBkb();
+
+            foreach ($bkb as $d) {
+
+                  $kodebar = $d->kodebar;
+                  $txtperiode = $d->txtperiode;
+                  $noref = $d->NO_REF;
+                  $nilai_item = $this->M_posting->get_nilai_item($kodebar, $txtperiode);
+                  $update_keluarbrgitem = $this->M_posting->update_keluarbrgitem($kodebar, $txtperiode, $noref, $nilai_item);
+            }
+
+            $data = true;
+            echo json_encode($data);
+      }
 }
 
 /* End of file Posting.php */

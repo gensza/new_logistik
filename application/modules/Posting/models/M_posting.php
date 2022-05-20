@@ -732,6 +732,34 @@ class M_posting extends CI_Model
             $harga = $data['nilai_item'] / $data['qty2'];
             return $harga;
       }
+
+      public function get_nilai_item($kodebar, $txtperiode)
+      {
+            // $this->db_logistik_pt->select('saldoakhir_qty, saldoakhir_nilai');
+            // $this->db_logistik_pt->where(['kodebar' => $kodebar, 'txtperiode <=' => $txtperiode]);
+            // $this->db_logistik_pt->from('stockawal');
+            // $stock_awal = $this->db_logistik_pt->get()->row_array();
+
+            $sql_rata2 = "SELECT SUM(saldoakhir_nilai) AS saldoakhir_nilai, SUM(saldoakhir_qty) AS saldoakhir_qty FROM stockawal WHERE txtperiode <= '$txtperiode' AND kodebar = '$kodebar'";
+            $stock_awal = $this->db_logistik_pt->query($sql_rata2)->row_array();
+
+            if ($stock_awal['saldoakhir_qty'] == 0) {
+                  $rata2 = $stock_awal['saldoakhir_nilai'];
+            } else {
+                  $rata2 = $stock_awal['saldoakhir_nilai'] / $stock_awal['saldoakhir_qty'];
+            }
+
+            //   $jumlah_nilai =  $qty2 * $rata2;
+
+            return $rata2;
+      }
+
+      function update_keluarbrgitem($kodebar, $txtperiode, $noref, $nilai_item)
+      {
+            $this->db_logistik_pt->set('nilai_item', $nilai_item);
+            $this->db_logistik_pt->where(['NO_REF' => $noref, 'kodebar' => $kodebar, 'txtperiode' => $txtperiode]);
+            return $this->db_logistik_pt->update('keluarbrgitem');
+      }
 }
 
 /* End of file M_posting.php */

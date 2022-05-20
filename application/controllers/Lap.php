@@ -9,7 +9,7 @@ class Lap extends CI_Controller
     {
         parent::__construct();
         $db_pt = check_db_pt();
-        $this->db_logistik = $this->load->database('db_logistik', TRUE);
+        // $this->db_logistik = $this->load->database('db_logistik', TRUE);
         $this->db_logistik_pt = $this->load->database('db_logistik_' . $db_pt, TRUE);
 
         if (!$this->session->userdata('id_user')) {

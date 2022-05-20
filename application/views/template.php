@@ -384,6 +384,9 @@ date_default_timezone_set('Asia/Jakarta');
                                     <a href="javascript:tutupbuku();" class="dropdown-item"><i class="fe-book mr-1"></i>
                                         <font face="Verdana" size="2.5">Tutup Buku</font>
                                     </a>
+                                    <a href="javascript:get_nilai_item();" class="dropdown-item"><i class="fe-book mr-1"></i>
+                                        <font face="Verdana" size="2.5">get nilai item bkb</font>
+                                    </a>
                                 </div>
                             </li>
 
@@ -2091,6 +2094,7 @@ date_default_timezone_set('Asia/Jakarta');
                 },
 
                 beforeSend: function() {
+                    now = moment().format('DD/MM/YYYY HH:mm:ss');
                     Swal.fire({
                         imageUrl: '<?php echo base_url(); ?>assets/img/loading3.gif',
                         imageHeight: 90,
@@ -2101,15 +2105,24 @@ date_default_timezone_set('Asia/Jakarta');
                     })
                     // $("#proses-posting").width('0%');
                 },
-                success: function(data) {
-                    console.log(data);
+                success: function(response) {
+                    console.log(response);
                     // $('#modal_progres').modal('hide');
                     //$("#loader").hide(); // hides loading sccreen in success call back
 
-                    window.Swal.fire({
-                        type: 'success',
-                        title: 'Berhasil Posting',
-                        showConfirmButton: true,
+                    console.log(response);
+                    then = moment().format('DD/MM/YYYY HH:mm:ss');
+
+                    var ms = moment(then, "DD/MM/YYYY HH:mm:ss").diff(moment(now, "DD/MM/YYYY HH:mm:ss"));
+                    var d = moment.duration(ms);
+
+                    var formats = d.hours() + ' Jam : ' + d.minutes() + ' Menit : ' + d.seconds() + ' Detik';
+
+                    swal({
+                        title: "Selesai",
+                        text: "Terima Kasih, Data berhasil di Posting dan tersimpan, Waktu Proses Posting " + formats + "",
+                        type: "success"
+
                     })
                 },
                 error: function(request) {
@@ -4146,6 +4159,49 @@ date_default_timezone_set('Asia/Jakarta');
                     swal({
                         title: "Selesai",
                         text: "Terima Kasih, Data berhasil di Posting dan tersimpan, Waktu Proses Posting " + formats + "",
+                        type: "success"
+
+                    })
+                },
+                error: function(request) {
+                    console.log(request.responseText);
+                }
+            });
+        }
+
+        function get_nilai_item() {
+            $.ajax({
+                url: "<?= site_url('Posting/get_nilai_item'); ?>",
+                type: "POST",
+                dataType: "JSON",
+                beforeSend: function() {
+                    Swal.fire({
+                        imageUrl: '<?php echo base_url(); ?>assets/img/loading3.gif',
+                        imageHeight: 90,
+                        imageAlt: 'A tall image',
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    })
+                    now = moment().format('DD/MM/YYYY HH:mm:ss');
+
+                },
+                success: function(response) {
+                    console.log(response);
+
+                },
+                complete: function(response) {
+                    console.log(response);
+                    then = moment().format('DD/MM/YYYY HH:mm:ss');
+
+                    var ms = moment(then, "DD/MM/YYYY HH:mm:ss").diff(moment(now, "DD/MM/YYYY HH:mm:ss"));
+                    var d = moment.duration(ms);
+
+                    var formats = d.hours() + ' Jam : ' + d.minutes() + ' Menit : ' + d.seconds() + ' Detik';
+
+                    swal({
+                        title: "Selesai",
+                        text: "Terima Kasih, Nilai Item berhasil di Posting dan tersimpan, Waktu Proses Posting " + formats + "",
                         type: "success"
 
                     })
