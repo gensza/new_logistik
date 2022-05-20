@@ -138,7 +138,7 @@ $nama_pt = $this->session->userdata('nama_pt');
           <?= $alamat_lok ?>
         <?php } ?>
       </td>
-      <td width="10%" height="10px" align="center"><img width="10%" height="60px" style="padding-right:8px" src="./assets/qrcode/po/<?= $po->qr_code ?>"></td>
+      <td width="10%" height="10px" align="center"><img width="10%" height="60px" style="padding-right:8px" src="./assets/qrcode/po/<?php echo $id . "_" . $nopo; ?>.png"></td>
     </tr>
   </table>
   <?php

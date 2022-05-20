@@ -106,7 +106,7 @@
                                         <th style="width:8%">Kuantitas</th>
                                         <th style="width:20%">Harga Satuan</th>
                                         <th style="width:20%">Total</th>
-                                        <th style="width:7%">PPN 10%</th>
+                                        <th style="width:7%">PPN 11%</th>
                                     </tr>
 
                                 </thead>
@@ -156,7 +156,7 @@
                                             <th style="width:8%">Kuantitas</th>
                                             <th style="width:20%">Harga Satuan</th>
                                             <th style="width:20%">Total</th>
-                                            <th style="width:7%">PPN 10%</th>
+                                            <th style="width:7%">PPN 11%</th>
                                         </tr>
 
                                     </thead>
@@ -165,6 +165,7 @@
                                         $noref = "'" . $list_po->noreftxt . "'";
                                         $query = "SELECT * FROM item_po WHERE batal = '0' $lokasi  AND noref = $noref";
                                         $item_po = $this->db_logistik_pt->query($query)->result();
+                                        var_dump($item_po) . die();
                                         foreach ($item_po as $list_item_po) { ?>
                                             <tr>
                                                 <td><?= $list_item_po->kodebartxt; ?></td>

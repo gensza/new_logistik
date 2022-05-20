@@ -29,6 +29,143 @@ class Po extends CI_Controller
         $this->load->library('form_validation');
     }
 
+
+    /* UTILITY UNTUK TB PO DAN ITEM PO */
+
+    public function update_noref_po()
+    {
+
+        $get_po = $this->db_logistik_pt->query("SELECT id, no_refppo, nopo FROM `po` WHERE noreftxt IS NULL")->result();
+
+        foreach ($get_po as $d) {
+            $cek_item_po = $this->db_logistik_pt->query("SELECT noref FROM item_po WHERE nopo='$d->nopo' AND refppo='$d->no_refppo'")->row();
+
+            // $lokasibuatspp = substr($d->no_refppo, 0, 3);
+            // switch ($lokasibuatspp) {
+            //     case 'PST': // HO
+            //         $lokasispp = 1;
+            //         break;
+            //     case 'ROM': // RO
+            //         $lokasispp = 2;
+            //         break;
+            //     case 'EST': // SITE
+            //         $lokasispp = 6;
+            //         break;
+            //     case 'FAC': // PKS
+            //         $lokasispp = 3;
+            //         break;
+            //     default:
+            //         break;
+            // }
+
+            // $lokasibuatpo = $d->kode_dev;
+            // switch ($lokasibuatpo) {
+            //     case '01':
+            //         $lokasipo = 1;
+            //         $kodepo = "BWJ";
+            //         break;
+            //     case '02':
+            //         $lokasipo = 2;
+            //         $kodepo = "PKY";
+            //         break;
+            //     case '06':
+            //         $lokasipo = 6;
+            //         $kodepo = "SWJ";
+            //         break;
+            //     case '07':
+            //         $lokasipo = 7;
+            //         $kodepo = "SWJ";
+            //         break;
+
+            //     case '03':
+            //         $lokasipo = 3;
+            //         $kodepo = "SWJ";
+            //         break;
+            //     default:
+            //         break;
+            // }
+
+            // // $key = $lokasispp . $lokasipo;
+            // // $hitung_key = strlen($key);
+            // // $query_po = "SELECT MAX(SUBSTRING(nopotxt, $hitung_key+1)) as maxpo from po WHERE nopotxt LIKE '$key%'";
+            // // $generate_po = $this->db_logistik_pt->query($query_po)->row();
+            // // $noUrut = (int)($generate_po->maxpo);
+            // // $noUrut++;
+            // // $print = sprintf("%05s", $noUrut);
+
+            // // $no_po = $lokasispp . $lokasipo . $print;
+
+
+            // # code...
+            // if ($lokasibuatpo == 'HO') {
+            //     # code...
+
+            //     // Est/swj/PO-Lokal/11/18/00034 atau Fac/swj/jkt/12/18/6100005 atau Est-POA/swj/jkt/12/18/6100004 atau Est2/swj/jkt/01/16/7100029
+            //     if ($d->jenis_spp == "SPP") {
+            //         # code...
+            //         $norefpo = $lokasibuatspp . "/" . $kodepo . "/PO/JKT/" . $d->bln . "/" . $d->thn . "/" . $d->nopo;
+            //     } else if ($d->jenis_spp == "SPPA") {
+            //         $norefpo = $lokasibuatspp . "/" . $kodepo . "/POA/JKT/" . $d->bln . "/" . $d->thn . "/" . $d->nopo;
+            //     } else if ($d->jenis_spp == "SPPI") {
+            //         $norefpo = $lokasibuatspp . "/" . $kodepo . "/PO-LOKAL/JKT/" . $d->bln . "/" . $d->thn . "/" . $d->nopo;
+            //     } else if ($d->jenis_spp == "SPPK") {
+            //         $norefpo = $lokasibuatspp . "/" . $kodepo . "/PO-KHUSUS/JKT/" . $d->bln . "/" . $d->thn . "/" . $d->nopo;
+            //     } else {
+            //         $norefpo = $lokasibuatspp . "/" . $kodepo . "/JKT/" . $d->bln . "/" . $d->thn . "/" . $d->nopo;
+            //     }
+            // } else {
+
+            //     // Est/swj/PO-Lokal/11/18/00034 atau Fac/swj/jkt/12/18/6100005 atau Est-POA/swj/jkt/12/18/6100004 atau Est2/swj/jkt/01/16/7100029
+            //     if ($d->jenis_spp == "SPP") {
+            //         # code...
+            //         $norefpo = $lokasibuatspp . "/" . $kodepo . "/PO/" . $d->bln . "/" . $d->thn . "/" . $d->nopo;
+            //     } else if ($d->jenis_spp == "SPPA") {
+            //         $norefpo = $lokasibuatspp . "/" . $kodepo . "/POA/" . $d->bln . "/" . $d->thn . "/" . $d->nopo;
+            //     } else if ($d->jenis_spp == "SPPI") {
+            //         $norefpo = $lokasibuatspp . "/" . $kodepo . "/PO-LOKAL/" . $d->bln . "/" . $d->thn . "/" . $d->nopo;
+            //     } else if ($d->jenis_spp == "SPPK") {
+            //         $norefpo = $lokasibuatspp . "/" . $kodepo . "/PO-KHUSUS/" . $d->bln . "/" . $d->thn . "/" . $d->nopo;
+            //     } else {
+            //         $norefpo = $lokasibuatspp . "/" . $kodepo . "/" . $d->bln . "/" . $d->thn . "/" . $d->nopo;
+            //     }
+            //     # code...
+            // }
+
+            $data = array(
+                'noreftxt' => $cek_item_po->noref,
+            );
+
+            $this->db_logistik_pt->set($data);
+            $this->db_logistik_pt->where(['id' => $d->id]);
+            $this->db_logistik_pt->update('po');
+        }
+
+        echo "berhasil";
+    }
+
+    function get_id_item_spp()
+    {
+        $lokasi = $this->session->userdata('status_lokasi');
+
+        /* ambil data item_spp */
+        $item_spp = $this->db_logistik_pt->query("SELECT id, noreftxt, kodebar FROM item_ppo WHERE LOKASI='$lokasi'")->result();
+        /* looping dan update ddata item PO yang tidak ada id item spp nya */
+        foreach ($item_spp as $p) {
+            $data['id_item_spp'] = $p->id;
+            $norefspp = $p->noreftxt;
+            $kodebar = $p->kodebar;
+
+            /* update item po yang tidak ada id item spp */
+            $this->db_logistik_pt->set($data);
+            $this->db_logistik_pt->where(['refppo' => $norefspp, 'kodebar' => $kodebar, 'lokasi' => $lokasi]);
+            $this->db_logistik_pt->update('item_po');
+            /* ends */
+        }
+        echo "berhasil";
+    }
+    /* END UTILITY */
+
+
     function hitungIsiItem()
     {
         $noref = $this->input->post('ref_po');
@@ -300,6 +437,31 @@ class Po extends CI_Controller
         echo json_encode($output);
     }
 
+    function qrcode($nopo, $id, $noref)
+    {
+        $this->load->library('Ciqrcode');
+        // header("Content-Type: image/png");
+
+        $config['cacheable']    = false; //boolean, the default is true
+        $config['cachedir']     = './assets/'; //string, the default is application/cache/
+        $config['errorlog']     = './assets/'; //string, the default is application/logs/
+        $config['imagedir']     = './assets/qrcode/po/'; //direktori penyimpanan qr code
+        $config['quality']      = true; //boolean, the default is true
+        $config['size']         = '1024'; //interger, the default is 1024
+        $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
+        $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
+        $this->ciqrcode->initialize($config);
+
+        $image_name = $id . '_' . $nopo . '.png'; //buat name dari qr code
+
+        // $params['data'] = site_url('lpb/cetak/'.$no_lpb.'/'.$id); //data yang akan di jadikan QR CODE
+        $params['data'] = $noref; //data yang akan di jadikan QR CODE
+        $params['level'] = 'H'; //H=High
+        $params['size'] = 10;
+        $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder
+        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+    }
+
     function cetak()
     {
         $nopo = str_replace('.', '/', $this->uri->segment('3'));
@@ -337,7 +499,9 @@ class Po extends CI_Controller
 
 
         $kode_supplier = $data['po']->kode_supply;
-        $qrcode = $data['po']->qr_code;
+        $this->qrcode($cek->nopo, $id, $nopo);
+        $data['id'] = $id;
+        $data['nopo'] = $cek->nopo;
 
         // $data['supplier'] = $this->db_logistik_pt->get_where('supplier', array('kode'=>$kode_supplier))->row();
 
@@ -386,6 +550,9 @@ class Po extends CI_Controller
             $namapt = $data['po']->namapt;
 
             $lokasi = $data['po']->lokasi;
+
+            // var_dump($data) . die();
+            // exit;
 
 
             $html = $this->load->view('v_po_print', $data, true);
@@ -760,11 +927,11 @@ class Po extends CI_Controller
                 $kodepo = "PKY";
                 break;
             case 'SITE':
-                $lokasipo = 2;
+                $lokasipo = 6;
                 $kodepo = "SWJ";
                 break;
             case 'PKS':
-                $lokasipo = 2;
+                $lokasipo = 3;
                 $kodepo = "SWJ";
                 break;
             default:
@@ -787,19 +954,6 @@ class Po extends CI_Controller
             $nopo = $this->input->post('hidden_no_po');
         }
 
-        $query_id = "SELECT MAX(id)+1 as no_id FROM po";
-        $generate_id = $this->db_logistik_pt->query($query_id)->row();
-        $no_id = $generate_id->no_id;
-        if (empty($no_id)) {
-            $no_id = 1;
-        }
-
-        $query_id_item = "SELECT MAX(id)+1 as no_id_item FROM item_po";
-        $generate_id_item = $this->db_logistik_pt->query($query_id_item)->row();
-        $no_id_item = $generate_id_item->no_id_item;
-        if (empty($no_id_item)) {
-            $no_id_item = 1;
-        }
 
         $hidden_jenis_spp = $this->input->post('hidden_jenis_spp');
 
@@ -921,28 +1075,7 @@ class Po extends CI_Controller
 
         $tanggalQR = date('Y-m-d');
 
-        //  generate qrcode
-        $this->load->library('ciqrcode'); //pemanggilan library QR CODE
 
-        $config['cacheable']    = true; //boolean, the default is true
-        $config['cachedir']     = './assets/'; //string, the default is application/cache/
-        $config['errorlog']     = './assets/'; //string, the default is application/logs/
-        $config['imagedir']     = './assets/qrcode/po/'; //direktori penyimpanan qr code
-        $config['quality']      = true; //boolean, the default is true
-        $config['size']         = '1024'; //interger, the default is 1024
-        $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
-        $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
-        $this->ciqrcode->initialize($config);
-
-        $image_name = $nopo . '_' . $tanggalQR . '.png'; //buat name dari qr code sesuai dengan nopo
-
-        $params['data'] = $norefpo; //data yang akan di jadikan QR CODE
-        $params['level'] = 'H'; //H=High
-        $params['size'] = 10;
-        $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/qrcode/
-        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
-
-        // end generate qrcode
 
         $kode_dev = $this->input->post('devisi');
         $data['devisi'] = $this->db_logistik_pt->get_where('tb_devisi', array('kodetxt' => $kode_dev))->row_array();
@@ -957,7 +1090,7 @@ class Po extends CI_Controller
         }
 
         $datainsert = [
-            'id' => $no_id,
+            // 'id' => $no_id,
             'kd_dept' => $data['nama_dept']['kode'],
             'ket_dept' => $this->input->post('hidden_departemen'),
             'kode_dev' => $this->input->post('hidden_kode_devisi'),
@@ -1008,67 +1141,12 @@ class Po extends CI_Controller
             'nopp' => NULL,
             'batal' => "0",
             'kirim' => $dikirim_ke_kebun,
-            'qr_code' => $image_name
         ];
 
-        $datainsert_histori = [
-            'id' => $no_id,
-            'kd_dept' => $data['nama_dept']['kode'],
-            'ket_dept' => $this->input->post('hidden_departemen'),
-            'grup' => $this->input->post('cmb_jenis_budget'),
-            'kode_budet' => "0",
-            'kd_subbudget' => "0",
-            'ket_subbudget' => NULL,
-            'nama_supply' => $this->input->post('txt_kode_supplier'),
-            'kode_supply' => $this->input->post('txt_supplier'),
-            'kode_pemesan' => $this->input->post('txt_kode_pemesan'),
-            'pemesan' => $this->input->post('txt_pemesan'),
-            'nopo' => $no_po,
-            'nopotxt' =>  $no_po,
-            'noppo' =>  $this->input->post('txt_no_spp'),
-            'noppotxt' => $this->input->post('txt_no_spp'),
-            'no_refppo' => $norefspp,
-            'tgl_refppo' =>  $this->input->post('hidden_tglref'),
-            'tgl_reftxt' =>  date("Ymd"),
-            'tglpo' =>  $this->input->post('tgl_po'),
-            'tglpotxt' => date("Ymd", strtotime($this->input->post('tgl_po'))),
-            'tglppo' =>  $tgl_ppo,
-            'tglppotxt' =>   $tgl_ppo_txt,
-            'bayar' => $this->input->post('cmb_status_bayar'),
-            'tempo_bayar' => $this->input->post('txt_tempo_pembayaran'),
-            'lokasikirim' => $this->input->post('txt_lokasi_pengiriman'),
-            'tempo_kirim' => $this->input->post('txt_tempo_pengiriman'),
-            'lokasi_beli' => $this->input->post('cmb_lokasi_pembelian'),
-            'ket' => $this->input->post('txt_keterangan'),
-            'kodept' => $this->session->userdata('kode_pt'),
-            'namapt' => $this->session->userdata('pt'),
-            'ket_acc' => $this->input->post('txt_no_penawaran'),
-            'periode' => $periode,
-            'periodetxt' => $periodetxt,
-            'thn' => date('Y'),
-            'tglisi' => date('Y-m-d H:i:s'),
-            'user' => $this->session->userdata('user'),
-            'ppn' =>  $this->input->post('cmb_ppn'),
-            'totalbayar' =>  $this->input->post('txt_total_pembayaran'),
-            'ket_kirim' => $this->input->post('txt_ket_pengiriman'),
-            'lokasi' => $this->session->userdata('status_lokasi'),
-            'noreftxt' => $norefpo,
-            'uangmuka' => $this->input->post('txt_uang_muka'),
-            'voucher' => $this->input->post('txt_no_voucher'),
-            'terbayar' => "0",
-            'nopp' => NULL,
-            'batal' => "0",
-            'kirim' => $dikirim_ke_kebun,
-            'keterangan_transaksi' => "INPUT PO",
-            'log' => $this->session->userdata('user') . " membuat PO $no_po",
-            'tgl_transaksi' => date("Y-m-d H:i:s"),
-            'user_transaksi' => $this->session->userdata('user'),
-            'client_ip' => $this->input->ip_address(),
-            'client_platform' => $this->platform->agent(),
-        ];
+
 
         $datainsertitem = [
-            'id' => $no_id_item,
+            // 'id' => $no_id_item,
             'nopo' => $no_po,
             'nopotxt' => $no_po,
             'noppo' => $this->input->post('txt_no_spp'),
@@ -1112,57 +1190,7 @@ class Po extends CI_Controller
             'konversi' => "0",
             'id_item_spp' => $this->input->post('id_item')
         ];
-        $datainsertitem_histori = [
-            'id' => $no_id_item,
-            'nopo' => $no_po,
-            'nopotxt' => $no_po,
-            'noppo' => $this->input->post('txt_no_spp'),
-            'noppotxt' => $this->input->post('txt_no_spp'),
-            'refppo' => $norefspp,
-            'tglppo' =>  $tgl_ppo,
-            'tglppotxt' => $tgl_ppo_txt,
-            'tglpo' =>  $this->input->post('tgl_po'),
-            'tglpotxt' => date("Ymd", strtotime($this->input->post('tgl_po'))),
-            'kodebar' => $this->input->post('hidden_kode_brg'),
-            'kodebartxt' => $this->input->post('hidden_kode_brg'),
-            'nabar' => $this->input->post('hidden_nama_brg'),
-            'sat' => $this->input->post('hidden_satuan_brg'),
-            'qty' => $this->input->post('txt_qty'),
-            'harga' => $this->input->post('txt_harga'),
-            'jumharga' => $jumharga,
-            'kodept' => $this->input->post('hidden_kodept'),
-            'namapt' => $this->input->post('hidden_namapt'),
-            'periode' => $periode,
-            'periodetxt' => $periodetxt,
-            'thn' => date('Y'),
-            'merek' => $this->input->post('txt_merk'),
-            'tglisi' => date('Y-m-d H:i:s'),
-            'user' => $this->session->userdata('user'),
-            'ket' => $this->input->post('txt_keterangan_rinci'),
-            'noref' => $norefpo,
-            'lokasi' => $this->session->userdata('status_lokasi'),
-            'hargasblm' => $this->input->post('txt_harga'),
-            'disc' => $diskon,
-            'kurs' => $this->input->post('cmb_kurs'),
-            'kode_budget' => "0",
-            'grup' => $this->input->post('cmb_jenis_budget'),
-            'main_acct' => "0",
-            'nama_main' => NULL,
-            'batal' => "0",
-            'cek_pp' => "0",
-            'KODE_BPO' => "0",
-            'JUMLAHBPO' => $biayalain,
-            'kode_bebanbpo' => Null,
-            'nama_bebanbpo' => $this->input->post('txt_keterangan_biaya_lain'),
-            'konversi' => "0",
-            'keterangan_transaksi' => "INPUT ITEM PO",
-            'log' => $this->session->userdata('user') . " membuat ITEM PO $no_po",
-            'tgl_transaksi' => date("Y-m-d H:i:s"),
-            'user_transaksi' => $this->session->userdata('user'),
-            'client_ip' => $this->input->ip_address(),
-            'client_platform' => $this->platform->agent(),
 
-        ];
 
         if ($this->session->userdata('status_lokasi') !== "HO") {
             if ($totalbayar > 1500000) {
@@ -1184,8 +1212,6 @@ class Po extends CI_Controller
                 $site_lebih_dari15 = 0;
                 $data1 = $this->db_logistik_pt->insert('po', $datainsert);
                 $data2 = $this->db_logistik_pt->insert('item_po', $datainsertitem);
-                $d1 = $this->db_logistik_pt->insert('po_history', $datainsert_histori);
-                $d2 = $this->db_logistik_pt->insert('item_po_history', $datainsertitem_histori);
             }
         } else {
             $id_ppo = $this->input->post('id_item');
@@ -1203,9 +1229,11 @@ class Po extends CI_Controller
             $site_lebih_dari15 = 0;
             $data1 = $this->db_logistik_pt->insert('po', $datainsert);
             $data2 = $this->db_logistik_pt->insert('item_po', $datainsertitem);
-            $d1 = $this->db_logistik_pt->insert('po_history', $datainsert_histori);
-            $d2 = $this->db_logistik_pt->insert('item_po_history', $datainsertitem_histori);
         }
+
+        $kodebar = $this->input->post('hidden_kode_brg');
+        $get_id_po = $this->db_logistik_pt->query("SELECT id FROM po WHERE noreftxt='$norefpo'")->row();
+        $get_id_item_po = $this->db_logistik_pt->query("SELECT id FROM item_po WHERE noref='$norefpo' AND kodebar='$kodebar'")->row();
 
         $data_return = [
             'data' => $data1,
@@ -1213,8 +1241,8 @@ class Po extends CI_Controller
             'nopo' => $no_po,
             'noref' => $norefpo,
             'refspp' => $norefspp,
-            'id_po' => $no_id,
-            'id_item' => $no_id_item,
+            'id_po' => $get_id_po->id,
+            'id_item' => $get_id_item_po->id,
             'site_lebih_dari15' => $site_lebih_dari15
         ];
 
@@ -1235,10 +1263,10 @@ class Po extends CI_Controller
                 $lokasispp = 2;
                 break;
             case 'EST': // SITE
-                $lokasispp = 3;
+                $lokasispp = 6;
                 break;
             case 'FAC': // PKS
-                $lokasispp = 6;
+                $lokasispp = 3;
                 break;
             default:
                 break;
@@ -1255,11 +1283,11 @@ class Po extends CI_Controller
                 $kodepo = "PKY";
                 break;
             case 'SITE':
-                $lokasipo = 3;
+                $lokasipo = 6;
                 $kodepo = "SWJ";
                 break;
             case 'PKS':
-                $lokasipo = 6;
+                $lokasipo = 3;
                 $kodepo = "SWJ";
                 break;
             default:
@@ -1281,12 +1309,12 @@ class Po extends CI_Controller
         $norefpo = $this->input->post('hidden_no_ref_po');
 
 
-        $query_id_item = "SELECT MAX(id)+1 as no_id_item FROM item_po";
-        $generate_id_item = $this->db_logistik_pt->query($query_id_item)->row();
-        $no_id_item = $generate_id_item->no_id_item;
-        if (empty($no_id_item)) {
-            $no_id_item = 1;
-        }
+        // $query_id_item = "SELECT MAX(id)+1 as no_id_item FROM item_po";
+        // $generate_id_item = $this->db_logistik_pt->query($query_id_item)->row();
+        // $no_id_item = $generate_id_item->no_id_item;
+        // if (empty($no_id_item)) {
+        //     $no_id_item = 1;
+        // }
 
         $tgl_ppo = date("Y-m-d", strtotime($this->input->post('hidden_tanggal')));
         $tgl_ppo_txt = date("Ymd", strtotime($this->input->post('hidden_tanggal')));
@@ -1342,7 +1370,7 @@ class Po extends CI_Controller
         }
 
         $datainsertitem = [
-            'id' => $no_id_item,
+            // 'id' => $no_id_item,
             'nopo' => $no_po,
             'nopotxt' => $no_po,
             'noppo' => $this->input->post('txt_no_spp'),
@@ -1387,57 +1415,7 @@ class Po extends CI_Controller
             'id_item_spp' => $this->input->post('id_item')
         ];
 
-        $datainsertitem_histori = [
-            'id' => $no_id_item,
-            'nopo' => $no_po,
-            'nopotxt' => $no_po,
-            'noppo' => $this->input->post('txt_no_spp'),
-            'noppotxt' => $this->input->post('txt_no_spp'),
-            'refppo' => $norefspp,
-            'tglppo' =>  $tgl_ppo,
-            'tglppotxt' => $tgl_ppo_txt,
-            'tglpo' =>  $this->input->post('tgl_po'),
-            'tglpotxt' => date("Ymd", strtotime($this->input->post('tgl_po'))),
-            'kodebar' => $this->input->post('hidden_kode_brg'),
-            'kodebartxt' => $this->input->post('hidden_kode_brg'),
-            'nabar' => $this->input->post('hidden_nama_brg'),
-            'sat' => $this->input->post('hidden_satuan_brg'),
-            'qty' => $this->input->post('txt_qty'),
-            'harga' => $this->input->post('txt_harga'),
-            'jumharga' => $jumharga,
-            'kodept' => $this->input->post('hidden_kodept'),
-            'namapt' => $this->input->post('hidden_namapt'),
-            'periode' => $periode,
-            'periodetxt' => $periodetxt,
-            'thn' => date('Y'),
-            'merek' => $this->input->post('txt_merk'),
-            'tglisi' => date('Y-m-d H:i:s'),
-            'user' => $this->session->userdata('user'),
-            'ket' => $this->input->post('txt_keterangan_rinci'),
-            'noref' => $norefpo,
-            'lokasi' => $this->session->userdata('status_lokasi'),
-            'hargasblm' => $this->input->post('txt_harga'),
-            'disc' => $diskon,
-            'kurs' => $this->input->post('cmb_kurs'),
-            'kode_budget' => "0",
-            'grup' => $this->input->post('cmb_jenis_budget'),
-            'main_acct' => "0",
-            'nama_main' => NULL,
-            'batal' => "0",
-            'cek_pp' => "0",
-            'KODE_BPO' => "0",
-            'JUMLAHBPO' => $biayalain,
-            'kode_bebanbpo' => Null,
-            'nama_bebanbpo' => $this->input->post('txt_keterangan_biaya_lain'),
-            'konversi' => "0",
-            'keterangan_transaksi' => "INPUT ITEM PO",
-            'log' => $this->session->userdata('user') . " membuat ITEM PO $no_po",
-            'tgl_transaksi' => date("Y-m-d H:i:s"),
-            'user_transaksi' => $this->session->userdata('user'),
-            'client_ip' => $this->input->ip_address(),
-            'client_platform' => $this->platform->agent(),
 
-        ];
 
         if ($this->session->userdata('status_lokasi') !== "HO") {
             if ($totalbayar > 1500000) {
@@ -1459,7 +1437,6 @@ class Po extends CI_Controller
 
                 $site_lebih_dari15 = 0;
                 $data = $this->db_logistik_pt->insert('item_po', $datainsertitem);
-                $d2 = $this->db_logistik_pt->insert('item_po_history', $datainsertitem_histori);
             }
         } else {
             $id_ppo = $this->input->post('id_item');
@@ -1476,15 +1453,17 @@ class Po extends CI_Controller
 
             $site_lebih_dari15 = 0;
             $data = $this->db_logistik_pt->insert('item_po', $datainsertitem);
-            $d2 = $this->db_logistik_pt->insert('item_po_history', $datainsertitem_histori);
         }
+
+        $kodebar = $this->input->post('hidden_kode_brg');
+        $get_id_item_po = $this->db_logistik_pt->query("SELECT id FROM item_po WHERE noref='$norefpo' AND kodebar='$kodebar'")->row();
 
         $data_return = [
             'data' => $data,
             'nopo' => $no_po,
             'noref' => $norefpo,
             'refspp' => $norefspp,
-            'id_item' => $no_id_item,
+            'id_item' => $get_id_item_po->id,
             'site_lebih_dari15' => $site_lebih_dari15
         ];
 
@@ -2419,11 +2398,11 @@ class Po extends CI_Controller
                 $kodepo = "PKY";
                 break;
             case 'SITE':
-                $lokasipo = 3;
+                $lokasipo = 6;
                 $kodepo = "SWJ";
                 break;
             case 'PKS':
-                $lokasipo = 6;
+                $lokasipo = 3;
                 $kodepo = "SWJ";
                 break;
             default:

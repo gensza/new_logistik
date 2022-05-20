@@ -60,7 +60,6 @@ class Laporan extends CI_Controller
 			$row[] = $hasil->kodebartxt;
 			$row[] = $hasil->nopart;
 			$row[] = $hasil->nabar;
-			// $row[] = $hasil->grp;
 			$row[] = $hasil->satuan;
 			$data[] = $row;
 		}
@@ -149,7 +148,7 @@ class Laporan extends CI_Controller
 			$row[] = $hasil->noreftxt;
 			$row[] = $stat;
 			$row[] = $hasil->user;
-			$row[] = '<button class="btn btn-xs btn-success fa fa-print" id="btn_print" target="_blank" name="btn_print" type="button" data-toggle="tooltip" data-placement="right" title="Print" onclick="printClick(' . $noref . ')"></button>';
+			$row[] = '<button class="btn btn-xs btn-success fa fa-print" id="btn_print" target="_blank" name="btn_print" type="button" data-toggle="tooltip" data-placement="right" title="Print" onclick="printClick(' . $hasil->noppo . ',' . $hasil->id . ')"></button>';
 
 			$data[] = $row;
 		}
@@ -206,7 +205,7 @@ class Laporan extends CI_Controller
 			$row[] = $hasil->noreftxt;
 			$row[] = $stat;
 			$row[] = $hasil->user;
-			$row[] = '<button class="btn btn-xs btn-success fa fa-print" id="btn_print" target="_blank" name="btn_print" type="button" data-toggle="tooltip" data-placement="right" title="Print" onclick="printClick(' . $noref . ')"></button>';
+			$row[] = '<button class="btn btn-xs btn-success fa fa-print" id="btn_print" target="_blank" name="btn_print" type="button" data-toggle="tooltip" data-placement="right" title="Print" onclick="printClick(' . $hasil->noppo . ',' . $hasil->id . ')"></button>';
 
 			$data[] = $row;
 		}
@@ -263,7 +262,7 @@ class Laporan extends CI_Controller
 			$row[] = $hasil->noreftxt;
 			$row[] = $stat;
 			$row[] = $hasil->user;
-			$row[] = '<button class="btn btn-xs btn-success fa fa-print" id="btn_print" target="_blank" name="btn_print" type="button" data-toggle="tooltip" data-placement="right" title="Print" onclick="printClick(' . $noref . ')"></button>';
+			$row[] = '<button class="btn btn-xs btn-success fa fa-print" id="btn_print" target="_blank" name="btn_print" type="button" data-toggle="tooltip" data-placement="right" title="Print" onclick="printClick(' . $hasil->noppo . ',' . $hasil->id . ')"></button>';
 
 			$data[] = $row;
 		}
@@ -377,7 +376,7 @@ class Laporan extends CI_Controller
 			$row[] = $hasil->noreftxt;
 			$row[] = $stat;
 			$row[] = $hasil->user;
-			$row[] = '<button class="btn btn-xs btn-success fa fa-print" id="btn_print" target="_blank" name="btn_print" type="button" data-toggle="tooltip" data-placement="right" title="Print" onclick="printClick(' . $noref . ')"></button>';
+			$row[] = '<button class="btn btn-xs btn-success fa fa-print" id="btn_print" target="_blank" name="btn_print" type="button" data-toggle="tooltip" data-placement="right" title="Print" onclick="printClick(' . $hasil->noppo . ',' . $hasil->id . ')"></button>';
 
 			$data[] = $row;
 		}
@@ -422,51 +421,10 @@ class Laporan extends CI_Controller
 		ini_set("pcre.backtrack_limit", "50000000");
 		$lokasii = $this->uri->segment(3);
 		$tanggal1 =  "'" . $this->uri->segment(6) . "-" . $this->uri->segment(5) . "-" . $this->uri->segment(4) . "'";
-		$tanggal2 =  "'" . $this->uri->segment(9) . "/" . $this->uri->segment(8) . "/" . $this->uri->segment(7) . "'";
+		$tanggal2 =  "'" . $this->uri->segment(9) . "-" . $this->uri->segment(8) . "-" . $this->uri->segment(7) . "'";
 		$tgl1 =  $this->uri->segment(6) . "-" . $this->uri->segment(5) . "-" . $this->uri->segment(4);
 		$tgl2 =  $this->uri->segment(9) . "/" . $this->uri->segment(8) . "/" . $this->uri->segment(7);
-		$tahun = $this->uri->segment(9);
-		switch ($this->uri->segment(8)) {
-			case '01':
-				$bulan = "Januari";
-				break;
-			case '02':
-				$bulan = "Februari";
-				break;
-			case '03':
-				$bulan = "Maret";
-				break;
-			case '04':
-				$bulan = "April";
-				break;
-			case '05':
-				$bulan = "Mei";
-				break;
-			case '06':
-				$bulan = "Juni";
-				break;
-			case '07':
-				$bulan = "Juli";
-				break;
-			case '08':
-				$bulan = "Agustus";
-				break;
-			case '09':
-				$bulan = "September";
-				break;
-			case '10':
-				$bulan = "Oktober";
-				break;
-			case '11':
-				$bulan = "November";
-				break;
-			case '12':
-				$bulan = "Desember";
-				break;
-			default:
-				$bulan = "";
-				break;
-		}
+
 		switch ($lokasii) {
 			case '01':
 				$lok = "AND kode_dev='01'";
@@ -518,6 +476,7 @@ class Laporan extends CI_Controller
 		$data['lokasi1'] = $lokasi1;
 		$data['lok'] = $lokasii;
 		$data['lokasi2'] = $lokasi2;
+		// var_dump($data) . die();
 		$mpdf = new \Mpdf\Mpdf([
 			'mode' => 'utf-8',
 			'format' => 'A4',
@@ -529,7 +488,6 @@ class Laporan extends CI_Controller
 		$html = $this->load->view('lapPo/vw_lap_po_print_register', $data, true);
 		$mpdf->WriteHTML($html);
 		$mpdf->Output();
-		// var_dump($query);
 
 		// echo "<pre>";
 		// print_r($data);
@@ -1226,10 +1184,11 @@ class Laporan extends CI_Controller
 		}
 
 
-		$tanggal1 = "'" . $this->uri->segment(6) . "/" . $this->uri->segment(5) . "/" . $this->uri->segment(4) . "'";
-		$tanggal2 = "'" . $this->uri->segment(9) . "/" . $this->uri->segment(8) . "/" . $this->uri->segment(7) . "'";
+		$tanggal1 = "'" . $this->uri->segment(6) . "-" . $this->uri->segment(5) . "-" . $this->uri->segment(4) . "'";
+		$tanggal2 = "'" . $this->uri->segment(9) . "-" . $this->uri->segment(8) . "-" . $this->uri->segment(7) . "'";
 		$query = "SELECT * FROM pp WHERE batal = '0' AND kodept = '$lokasi' AND tglpp BETWEEN $tanggal1 AND $tanggal2 ";
 		$data['pp'] = $this->db_logistik_pt->query($query)->result();
+		// var_dump($data['pp']) . die();
 		$tanggal1 = str_replace("/", "-", ($tanggal1));
 		$tanggal1 = str_replace("'", "", ($tanggal1));
 		$tanggal1 = date_format(date_create($tanggal1), 'd/m/Y');
@@ -1870,9 +1829,9 @@ class Laporan extends CI_Controller
 		$bagian = str_replace('-', '&', $bagian);
 		$bagian = str_replace('.', ' ', $bagian);
 		if ($bagian == 'Semua') {
-			$query = "SELECT a.*, b.bag, b.devisi FROM keluarbrgitem a, stockkeluar b WHERE a.NO_REF = b.NO_REF AND a.periode BETWEEN '$tanggal1' AND '$tanggal2' AND a.batal = '0' AND a.kode_dev='$lokasi' ORDER BY a.periode ASC";
+			$query = "SELECT a.*, b.bag, b.devisi FROM keluarbrgitem a, stockkeluar b WHERE a.NO_REF = b.NO_REF AND a.tgl BETWEEN '$tanggal1' AND '$tanggal2' AND a.batal = '0' AND a.kode_dev='$lokasi' ORDER BY a.tgl, a.skb ASC";
 		} else {
-			$query = "SELECT a.*, b.bag, b.devisi FROM keluarbrgitem a, stockkeluar b WHERE a.NO_REF = b.NO_REF AND a.periode BETWEEN '$tanggal1' AND '$tanggal2' AND a.batal = '0' AND a.kode_dev='$lokasi' AND b.bag = '$bagian' ORDER BY a.periode ASC";
+			$query = "SELECT a.*, b.bag, b.devisi FROM keluarbrgitem a, stockkeluar b WHERE a.NO_REF = b.NO_REF AND a.tgl BETWEEN '$tanggal1' AND '$tanggal2' AND a.batal = '0' AND a.kode_dev='$lokasi' AND b.bag = '$bagian' ORDER BY a.tgl, a.skb ASC";
 		}
 
 		$data['bkb'] = $this->db_logistik_pt->query($query)->result();
@@ -1880,20 +1839,22 @@ class Laporan extends CI_Controller
 		$data['tgl2'] = $tanggal2;
 		$data['lokasi'] = $lokasi;
 		$data['alamat'] = $lokasi;
-		$mpdf = new \Mpdf\Mpdf([
-			'mode' => 'utf-8',
-			'format' => [190, 236],
-			'margin_top' => '2',
-			'orientation' => 'L'
-		]);
+		// $mpdf = new \Mpdf\Mpdf([
+		// 	'mode' => 'utf-8',
+		// 	'format' => [190, 236],
+		// 	'margin_top' => '2',
+		// 	'orientation' => 'L'
+		// ]);
 
-		$html = $this->load->view('lapBkb/vw_lap_bkb_print_register', $data, true);
-		$mpdf->WriteHTML($html);
-		$mpdf->Output();
+		// $html = $this->load->view('lapBkb/vw_lap_bkb_print_register', $data, true);
+		// $mpdf->WriteHTML($html);
+		// $mpdf->Output();
 
 		// echo "<pre>";
 		// print_r($data);
 		// echo "</pre>";
+
+		$this->load->view('lapBkb/vw_lap_bkb_print_register', $data);
 	}
 
 	function listLapSlipBKB()

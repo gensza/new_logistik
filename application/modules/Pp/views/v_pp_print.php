@@ -88,7 +88,7 @@ if ($po->lokasi == 'HO') {
         <tr>
             <td width="13%">Nomor PP</td>
             <td width="2%">:</td>
-            <td align="left"><?= $data_pp->ref_pp; ?></td>
+            <td align="left"><?= $data_pp->nopp; ?></td>
             <td width="25%" style="text-align: right;">Tanggal : <?= date('d-m-Y', strtotime($data_pp->tglpp)); ?></td>
         </tr>
         <tr class="notopborder">
