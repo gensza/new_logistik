@@ -114,16 +114,18 @@ class Lap extends CI_Controller
             $data['p2'] = $p2;
 
 
-            $mpdf = new \Mpdf\Mpdf([
-                'mode' => 'utf-8',
-                'format' => [190, 236],
-                // 'margin_top' => '2',
-                'orientation' => 'P'
-            ]);
+            // $mpdf = new \Mpdf\Mpdf([
+            //     'mode' => 'utf-8',
+            //     'format' => [190, 236],
+            //     // 'margin_top' => '2',
+            //     'orientation' => 'P'
+            // ]);
 
-            $html = $this->load->view('lapRS/vw_lap_rinci_tampil', $data, true);
-            $mpdf->WriteHTML($html);
-            $mpdf->Output();
+            // $html = $this->load->view('lapRS/vw_lap_rinci_tampil', $data, true);
+            // $mpdf->WriteHTML($html);
+            // $mpdf->Output();
+
+            $this->template->load('template', 'lapRS/vw_lap_rinci_tampil', $data);
         } else if ($pilihan == "Summary") {
 
             if ($pt == 'Semua') {
@@ -151,20 +153,22 @@ class Lap extends CI_Controller
                 $data['grp_stockawal'] = $this->db_logistik_pt->get()->result();
             }
 
-            $mpdf = new \Mpdf\Mpdf([
-                'mode' => 'utf-8',
-                'format' => [190, 236],
-                // 'margin_top' => '2',
-                'orientation' => 'P'
-            ]);
+            // $mpdf = new \Mpdf\Mpdf([
+            //     'mode' => 'utf-8',
+            //     'format' => [190, 236],
+            //     // 'margin_top' => '2',
+            //     'orientation' => 'P'
+            // ]);
 
             $data['kode_dev'] = $pt;
             $data['txtperiode'] = $txtperiode;
             $data['alamat'] = $pt;
 
-            $html = $this->load->view('lapRS/vw_lap_summary', $data, true);
-            $mpdf->WriteHTML($html);
-            $mpdf->Output();
+            // $html = $this->load->view('lapRS/vw_lap_summary', $data, true);
+            // $mpdf->WriteHTML($html);
+            // $mpdf->Output();
+
+            $this->template->load('template', 'lapRS/vw_lap_summary', $data);
         } else if ($pilihan == "Nilai_Rupiah") {
             // if($kd_stock_1 == "Semua"){
             // 	$query_stockawal = "SELECT kodebartxt, nabar, saldoawal_qty, saldoawal_nilai, KODE, txtperiode, satuan, HARGAPORAT, nilai_masuk, QTY_MASUK, QTY_KELUAR, saldoakhir_qty, saldoakhir_nilai FROM stockawal WHERE KODE = '$pt' AND txtperiode = '$ym_periode'";
@@ -211,6 +215,8 @@ class Lap extends CI_Controller
             $html = $this->load->view('lapRS/vw_lap_nilai_rupiah', $data, true);
             $mpdf->WriteHTML($html);
             $mpdf->Output();
+
+            $this->template->load('template', 'lapRS/vw_lap_nilai_rupiah', $data);
         } else if ($pilihan == "Rupiah_Rata_-_Rata_Harian") {
 
             // if($kd_stock_1 == "Semua"){
@@ -222,14 +228,16 @@ class Lap extends CI_Controller
             $query_stockawal_harian = "SELECT DISTINCT grp FROM stockawal_harian WHERE KODE = '$pt' AND txtperiode = '$txtperiode' ORDER BY grp ASC";
             $data['grp_stockawal_harian'] = $this->db_logistik_pt->query($query_stockawal_harian)->result();
 
-            $this->load->view('lapRS/vw_lap_nilai_rupiah_harian', $data);
+            // $this->load->view('lapRS/vw_lap_nilai_rupiah_harian', $data);
 
-            $mpdf = new \Mpdf\Mpdf([
-                'mode' => 'utf-8',
-                'format' => [190, 236],
-                // 'margin_top' => '2',
-                'orientation' => 'P'
-            ]);
+            // $mpdf = new \Mpdf\Mpdf([
+            //     'mode' => 'utf-8',
+            //     'format' => [190, 236],
+            //     // 'margin_top' => '2',
+            //     'orientation' => 'P'
+            // ]);
+
+            $this->template->load('template', 'lapRS/vw_lap_nilai_rupiah_harian', $data);
         }
         // echo "<pre>";
         // print_r($data);

@@ -1142,16 +1142,18 @@ class Laporan extends CI_Controller
 		$data['lokasi'] = $lokasi;
 		$data['alamat'] = $lok;
 		$data['devisi'] = $devisi;
-		$mpdf = new \Mpdf\Mpdf([
-			'mode' => 'utf-8',
-			'format' => [190, 236],
-			'margin_top' => '2',
-			'orientation' => 'P'
-		]);
+		// $mpdf = new \Mpdf\Mpdf([
+		// 	'mode' => 'utf-8',
+		// 	'format' => [190, 236],
+		// 	'margin_top' => '2',
+		// 	'orientation' => 'P'
+		// ]);
 
-		$html = $this->load->view('lapPo/vw_lap_po_hb', $data, true);
-		$mpdf->WriteHTML($html);
-		$mpdf->Output();
+		// $html = $this->load->view('lapPo/vw_lap_po_hb', $data, true);
+		// $mpdf->WriteHTML($html);
+		// $mpdf->Output();
+
+		$this->template->load('template', 'lapPo/vw_lap_po_hb', $data);
 	}
 
 	function print_lap_pp_register()
@@ -2619,7 +2621,7 @@ class Laporan extends CI_Controller
 
 	function print_lap_rsh_rinci()
 	{
-		ini_set('pcre.backtrack_limit', '50000000');
+		// ini_set('pcre.backtrack_limit', '50000000');
 		// if ($lokasi == '01') {
 		// 	$posisi = 'HO';
 		// } else if ($lokasi == '02') {
@@ -2695,17 +2697,18 @@ class Laporan extends CI_Controller
 		$data['p1'] = $p1;
 		$data['p2'] = $p2;
 
-		$mpdf = new \Mpdf\Mpdf([
-			'mode' => 'utf-8',
-			'format' => [190, 236],
-			// 'margin_top' => '2',
-			'orientation' => 'L'
-		]);
+		// $mpdf = new \Mpdf\Mpdf([
+		// 	'mode' => 'utf-8',
+		// 	'format' => [190, 236],
+		// 	// 'margin_top' => '2',
+		// 	'orientation' => 'L'
+		// ]);
 
-		$html = $this->load->view('lapRSH/vw_lap_bkb_print_rsh_rinci', $data, true);
-		$mpdf->WriteHTML($html);
-		$mpdf->Output();
+		// $html = $this->load->view('lapRSH/vw_lap_bkb_print_rsh_rinci', $data, true);
+		// $mpdf->WriteHTML($html);
+		// $mpdf->Output();
 
+		$this->template->load('template', 'lapRSH/vw_lap_bkb_print_rsh_rinci', $data);
 
 		// echo "<pre>";
 		// print_r($data);
@@ -2714,7 +2717,8 @@ class Laporan extends CI_Controller
 
 	function print_lap_rsh_summary()
 	{
-		ini_set('pcre.backtrack_limit', '50000000');
+		// ini_set('pcre.backtrack_limit', '50000000');
+
 		// $lokasi = $this->uri->segment(3);
 		// if ($lokasi == '01') {
 		// 	$posisi = 'HO';
@@ -2791,17 +2795,18 @@ class Laporan extends CI_Controller
 		$data['p1'] = $p1;
 		$data['p2'] = $p2;
 
-		$mpdf = new \Mpdf\Mpdf([
-			'mode' => 'utf-8',
-			'format' => [190, 236],
-			// 'margin_top' => '2',
-			'orientation' => 'L'
-		]);
+		// $mpdf = new \Mpdf\Mpdf([
+		// 	'mode' => 'utf-8',
+		// 	'format' => [190, 236],
+		// 	// 'margin_top' => '2',
+		// 	'orientation' => 'L'
+		// ]);
 
-		$html = $this->load->view('lapRSH/vw_lap_bkb_print_rsh_summary', $data, true);
-		$mpdf->WriteHTML($html);
-		$mpdf->Output();
+		// $html = $this->load->view('lapRSH/vw_lap_bkb_print_rsh_summary', $data, true);
+		// $mpdf->WriteHTML($html);
+		// $mpdf->Output();
 
+		$this->template->load('template', 'lapRSH/vw_lap_bkb_print_rsh_summary', $data);
 
 		// echo "<pre>";
 		// print_r($data);
@@ -2908,7 +2913,8 @@ class Laporan extends CI_Controller
 
 	function print_lap_rsh_nilai_rupiah()
 	{
-		ini_set('pcre.backtrack_limit', '50000000');
+		// ini_set('pcre.backtrack_limit', '50000000');
+
 		// if ($lokasi == '01') {
 		// 	$posisi = 'HO';
 		// } else if ($lokasi == '02') {
@@ -2984,19 +2990,20 @@ class Laporan extends CI_Controller
 		$data['p1'] = $p1;
 		$data['p2'] = $p2;
 
-		$mpdf = new \Mpdf\Mpdf([
-			'mode' => 'utf-8',
-			'format' => [190, 236],
-			// 'margin_top' => '2',
-			'margin_left' => '2',
-			'margin_right' => '2',
-			'orientation' => 'L'
-		]);
+		// $mpdf = new \Mpdf\Mpdf([
+		// 	'mode' => 'utf-8',
+		// 	'format' => [190, 236],
+		// 	// 'margin_top' => '2',
+		// 	'margin_left' => '2',
+		// 	'margin_right' => '2',
+		// 	'orientation' => 'L'
+		// ]);
 
-		$html = $this->load->view('lapRSH/vw_lap_bkb_print_rsh_nilai_rupiah', $data, true);
-		$mpdf->WriteHTML($html);
-		$mpdf->Output();
+		// $html = $this->load->view('lapRSH/vw_lap_bkb_print_rsh_nilai_rupiah', $data, true);
+		// $mpdf->WriteHTML($html);
+		// $mpdf->Output();
 
+		$this->template->load('template', 'lapRSH/vw_lap_bkb_print_rsh_nilai_rupiah', $data);
 
 		// echo "<pre>";
 		// print_r($data);
@@ -3005,7 +3012,7 @@ class Laporan extends CI_Controller
 
 	function print_lap_rsh_nilai_rupiah_sum()
 	{
-		ini_set('pcre.backtrack_limit', '50000000');
+		// ini_set('pcre.backtrack_limit', '50000000');
 		// $lokasi = $this->uri->segment(3);
 		// if ($lokasi == '01') {
 		// 	$posisi = 'HO';
@@ -3091,9 +3098,11 @@ class Laporan extends CI_Controller
 			'orientation' => 'L'
 		]);
 
-		$html = $this->load->view('lapRSH/vw_lap_bkb_print_rsh_nilai_rupiah_sum', $data, true);
-		$mpdf->WriteHTML($html);
-		$mpdf->Output();
+		// $html = $this->load->view('lapRSH/vw_lap_bkb_print_rsh_nilai_rupiah_sum', $data, true);
+		// $mpdf->WriteHTML($html);
+		// $mpdf->Output();
+
+		$this->template->load('template', 'lapRSH/vw_lap_bkb_print_rsh_nilai_rupiah_sum', $data);
 	}
 
 	function list_group_brg()

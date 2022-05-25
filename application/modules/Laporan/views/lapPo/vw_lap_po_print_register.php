@@ -165,7 +165,7 @@
                                         $noref = "'" . $list_po->noreftxt . "'";
                                         $query = "SELECT * FROM item_po WHERE batal = '0' $lokasi  AND noref = $noref";
                                         $item_po = $this->db_logistik_pt->query($query)->result();
-                                        var_dump($item_po) . die();
+                                        // var_dump($item_po) . die();
                                         foreach ($item_po as $list_item_po) { ?>
                                             <tr>
                                                 <td><?= $list_item_po->kodebartxt; ?></td>

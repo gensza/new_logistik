@@ -81,7 +81,7 @@
                         $total = 0;
                         foreach ($item_po as $list_item_po) {
                               $get_grup_sql = "SELECT grp FROM kodebar WHERE kodebar = $list_item_po->kodebar";
-                              $get_grup = $this->db_logistik->query($get_grup_sql)->row_array();
+                              $get_grup = $this->db_logistik_center->query($get_grup_sql)->row_array();
                         ?>
                               <tr>
                                     <td><?= $no++; ?></td>
